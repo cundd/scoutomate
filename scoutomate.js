@@ -43,6 +43,13 @@
 	 */
 	Scoutomate.Actions.click = 'Scoutomate.Actions.click';
 
+	/**
+	 * Constant to select an option
+	 *
+	 * @type {string}
+	 */
+	Scoutomate.Actions.select = 'Scoutomate.Actions.select';
+
 	Scoutomate.prototype = {
 		/**
 		 * Loops through each property of data and takes the keys to search the DOM for matching elements which will
@@ -69,6 +76,9 @@
 						if (valueOrAction === Scoutomate.Actions.click) {
 							_console.debug('Perform click on ', element);
 							_this.triggerEvent(element, 'click');
+						} else if (valueOrAction === Scoutomate.Actions.select) {
+							_console.debug('Perform click on ', element);
+							element.setAttribute('selected', true);
 						} else {
 							element.value = valueOrAction;
 						}
