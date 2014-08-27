@@ -6,7 +6,7 @@
 		scoutomateInstance;
 
 
-		/**
+	/**
 	 * Creates a new instance
 	 *
 	 * @param {Object} data Object with keys to define selectors and values or actions
@@ -80,7 +80,10 @@
 							_console.debug('Perform click on ', element);
 							element.setAttribute('selected', true);
 						} else {
+							_this.triggerEvent(element, 'focus');
 							element.value = valueOrAction;
+							_this.triggerEvent(element, 'change');
+							_this.triggerEvent(element, 'blur');
 						}
 					});
 
@@ -110,7 +113,7 @@
 	if (window.ScoutomateData) {
 		scoutomateInstance = new Scoutomate(window.ScoutomateData);
 	} else {
-		scoutomateInstance = new Scoutomate(window.ScoutomateData);
+		scoutomateInstance = new Scoutomate();
 	}
 	return scoutomateInstance;
 })();
