@@ -2,9 +2,7 @@
  * Created by COD on 30.06.14.
  */
 (function () {
-	var Scoutomate = window.Scoutomate = window.Scoutomate || {},
-		scoutomateInstance;
-
+	var scoutomateInstance;
 
 	/**
 	 * Creates a new instance
@@ -14,7 +12,7 @@
 	 * @param {Object} [options]
 	 * @constructor
 	 */
-	Scoutomate = function (data, root, options) {
+	var Scoutomate = window.Scoutomate = function (data, root, options) {
 		var ef = function () {
 		};
 		this.data = data;
@@ -51,42 +49,82 @@
 	Scoutomate.Actions.select = 'Scoutomate.Actions.select';
 
 	Scoutomate.prototype = {
+        /**
+         * Select a value in a select box
+         *
+         * @param element
+         */
+        select: function (element) {
+            this.console.debug('Perform click on ', element);
+            element.setAttribute('selected', true);
+
+            // Set the value of the parent select box if not done with setting "selected"
+            var selectElement = element.parentElement.nodeName === 'SELECT' ? element.parentElement : element.parentElement.parentElement;
+            if (selectElement.value != element.value) {
+                selectElement.value = element.value;
+            }
+        },
+
+        /**
+         * Fill a input element
+         *
+         * @param element
+         * @param valueOrAction
+         */
+        fillField: function (element, valueOrAction) {
+            this.triggerEvent(element, 'focus');
+            element.value = valueOrAction;
+            this.triggerEvent(element, 'change');
+            this.triggerEvent(element, 'blur');
+        },
+
+        /**
+         * Perform a click
+         *
+         * @param element
+         */
+        click: function (element) {
+            this.console.debug('Perform click on ', element);
+            this.triggerEvent(element, 'click');
+        },
+
+        /**
+		 * Fills the given field or performs the action
+		 *
+		 * @param {string} selector
+		 * @param {*} valueOrAction
+		 * @returns {NodeList}
+		 */
+		handle: function (selector, valueOrAction) {
+			var _this = this;
+			var _console = this.console;
+			_console.debug('Looking for "' + selector + '"');
+			var domNodes = this.root.querySelectorAll(selector);
+			_console.debug(domNodes);
+
+			Array.prototype.forEach.call(domNodes, function (element) {
+				_console.debug(valueOrAction);
+				if (valueOrAction === Scoutomate.Actions.click) {
+					_this.click(element);
+				} else if (valueOrAction === Scoutomate.Actions.select) {
+					_this.select(element);
+				} else {
+					_this.fillField(element, valueOrAction);
+				}
+			});
+		},
+
 		/**
 		 * Loops through each property of data and takes the keys to search the DOM for matching elements which will
 		 * then be filled with the property value or a special action will be performed if the value tells to
 		 */
 		fill: function () {
-			var _this = this,
-				_data = this.data,
-				_root = this.root,
-				_console = this.console,
-				domNodes, name, valueOrAction;
+			var _data = this.data,
+				name;
 
 			for (name in _data) {
-
 				if (_data.hasOwnProperty(name)) {
-					valueOrAction = _data[name];
-					_console.debug('Looking for "' + name + '"');
-					domNodes = _root.querySelectorAll(name);
-					_console.debug(domNodes);
-
-
-					Array.prototype.forEach.call(domNodes, function (element, i) {
-						_console.debug(valueOrAction)
-						if (valueOrAction === Scoutomate.Actions.click) {
-							_console.debug('Perform click on ', element);
-							_this.triggerEvent(element, 'click');
-						} else if (valueOrAction === Scoutomate.Actions.select) {
-							_console.debug('Perform click on ', element);
-							element.setAttribute('selected', true);
-						} else {
-							_this.triggerEvent(element, 'focus');
-							element.value = valueOrAction;
-							_this.triggerEvent(element, 'change');
-							_this.triggerEvent(element, 'blur');
-						}
-					});
-
+					this.handle(name,_data[name]);
 				}
 			}
 		},
@@ -100,7 +138,7 @@
 		 */
 		triggerEvent: function (node, eventName, data) {
 			if (eventName === 'click') {
-				this.console.log(node)
+				this.console.log(node);
 				node.click();
 				return;
 			}
