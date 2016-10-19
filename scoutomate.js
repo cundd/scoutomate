@@ -21,12 +21,6 @@
                 'autofill': true
             };
 
-        this.console = window.console || {
-                log: ef,
-                debug: ef,
-                info: ef
-            };
-
         if (data && this.options.autofill) {
             this.fill();
         }
@@ -55,7 +49,7 @@
          * @param element
          */
         select: function (element) {
-            this.console.debug('Perform click on ', element);
+            this._debug('Perform click on ', element);
             element.setAttribute('selected', true);
 
             // Set the value of the parent select box if not done with setting "selected"
@@ -84,7 +78,7 @@
          * @param element
          */
         click: function (element) {
-            this.console.debug('Perform click on ', element);
+            this._debug('Perform click on ', element);
             this.triggerEvent(element, 'click');
         },
 
@@ -97,13 +91,12 @@
          */
         handle: function (selector, valueOrAction) {
             var _this = this;
-            var _console = this.console;
-            _console.debug('Looking for "' + selector + '"');
+            this._debug('Looking for "' + selector + '"');
             var domNodes = this.root.querySelectorAll(selector);
-            _console.debug(domNodes);
+            this._debug(domNodes);
 
             Array.prototype.forEach.call(domNodes, function (element) {
-                _console.debug(valueOrAction);
+                _this._debug(valueOrAction);
                 if (valueOrAction === Scoutomate.Actions.click) {
                     _this.click(element);
                 } else if (valueOrAction === Scoutomate.Actions.select) {
@@ -138,18 +131,60 @@
          */
         triggerEvent: function (node, eventName, data) {
             if (eventName === 'click') {
-                this.console.log(node);
+                this._log(node);
                 node.click();
                 return;
             }
             var event = document.createEvent('HTMLEvents');
             event.initEvent(eventName, true, false);
             node.dispatchEvent(event);
+        },
+
+        /**
+         * Debug-log
+         *
+         * @param item
+         * @returns {*}
+         * @private
+         */
+        _debug: function (item) {
+            return this._applyLoggerFunction('debug', arguments);
+        },
+
+        /**
+         * Log
+         *
+         * @param item
+         * @returns {*}
+         * @private
+         */
+        _log: function (item) {
+            return this._applyLoggerFunction('log', arguments);
+        },
+
+        /**
+         * Perform a log function
+         *
+         * @param functionName
+         * @param inputArguments
+         * @returns {Scoutomate}
+         * @private
+         */
+        _applyLoggerFunction: function (functionName, inputArguments) {
+            var logger = window.console;
+            if (logger && typeof logger[functionName] === 'function') {
+                var argumentsArray = Array.prototype.slice.call(inputArguments);
+                argumentsArray.unshift('[Scoutomate]');
+
+                logger[functionName].apply(logger, argumentsArray);
+            }
+
+            return this;
         }
     };
 
-    if (window.ScoutomateData) {
-        scoutomateInstance = new Scoutomate(window.ScoutomateData);
+    if (window['ScoutomateData']) {
+        scoutomateInstance = new Scoutomate(window['ScoutomateData']);
     } else {
         scoutomateInstance = new Scoutomate();
     }
