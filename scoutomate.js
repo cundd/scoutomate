@@ -91,9 +91,8 @@
          */
         handle: function (selector, valueOrAction) {
             var _this = this;
-            this._debug('Looking for "' + selector + '"');
             var domNodes = this.root.querySelectorAll(selector);
-            this._debug(domNodes);
+            this._debug('Found ' + domNodes.length + ' for "' + selector + '"');
 
             Array.prototype.forEach.call(domNodes, function (element) {
                 _this._debug(valueOrAction);
