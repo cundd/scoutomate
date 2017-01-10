@@ -13,6 +13,7 @@ window.ScoutomateData = {
 		'[name="billing[city]"]':                             'NYC',
 		'[name="billing[postcode]"]':                         '10003',
 		'[name="billing[telephone]"]':                        '123456',
+		'[name="billing[payment]"][value="VISA"]':            'Scoutomate.Actions.click', // Click on the radio button 
 		'#co-billing-form #billing-buttons-container button': 'Scoutomate.Actions.click' // Click the element
 }; if (!window.Scoutomate) { // Load Scoutomate
 	(function() {
