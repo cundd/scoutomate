@@ -2,8 +2,6 @@
  * Created by COD on 30.06.14.
  */
 (function () {
-    var scoutomateInstance;
-
     /**
      * Creates a new instance
      *
@@ -13,13 +11,16 @@
      * @constructor
      */
     var Scoutomate = window.Scoutomate = function (data, root, options) {
-        var ef = function () {
-        };
         this.data = data;
         this.root = root ? document.querySelector(root) : document.querySelector('body');
-        this.options = options || {
-                'autofill': true
-            };
+        this.options = Object.assign(
+            {},
+            {
+                'autofill': true,
+                'debug': false
+            },
+            options || {}
+        );
 
         if (data && this.options.autofill) {
             this.fill();
@@ -49,7 +50,7 @@
          * @param element
          */
         select: function (element) {
-            this._debug('Perform click on ', element);
+            this._debug('Select of element ', element);
             element.setAttribute('selected', true);
 
             // Set the value of the parent select box if not done with setting "selected"
@@ -147,7 +148,11 @@
          * @private
          */
         _debug: function (item) {
-            return this._applyLoggerFunction('debug', arguments);
+            if (this.options.debug) {
+                return this._applyLoggerFunction('debug', arguments);
+            }
+
+            return this;
         },
 
         /**
@@ -182,10 +187,8 @@
         }
     };
 
-    if (window['ScoutomateData']) {
-        scoutomateInstance = new Scoutomate(window['ScoutomateData']);
-    } else {
-        scoutomateInstance = new Scoutomate();
-    }
-    return scoutomateInstance;
+    var scoutomateOptions = window['ScoutomateOptions'] || {};
+    var scoutomateData = window['ScoutomateData'];
+
+    return new Scoutomate(scoutomateData, null, scoutomateOptions);
 })();
