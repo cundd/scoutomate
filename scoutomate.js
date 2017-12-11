@@ -1,6 +1,3 @@
-/**
- * Created by COD on 30.06.14.
- */
 (function () {
     /**
      * Creates a new instance
