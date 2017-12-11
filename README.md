@@ -3,23 +3,24 @@ Scoutomate
 
 Create a map of CSS selectors and values and let Scoutomate fill in the matching fields or click on elements.
 
+Usage
+-----
+
+First define your data:
 
 ```javascript
 window.ScoutomateData = {
-		'[name="billing[firstname]"]':                        'Daniel', // Fill in the input
-		'[name="billing[lastname]"]':                         'Corn',
-		'[name="billing[email]"]':                            'spm@cundd.net',
-		'[name="billing[street][]"]':                         'Bingstreet 382',
-		'[name="billing[city]"]':                             'NYC',
-		'[name="billing[postcode]"]':                         '10003',
-		'[name="billing[telephone]"]':                        '123456',
-		'[name="billing[payment]"][value="VISA"]':            'Scoutomate.Actions.click', // Click on the radio button 
-		'#co-billing-form #billing-buttons-container button': 'Scoutomate.Actions.click' // Click the element
-}; if (!window.Scoutomate) { // Load Scoutomate
-	(function() {
-		var loaderTag = document.createElement('script');
-		loaderTag.src = 'https://raw.githubusercontent.com/cundd/scoutomate/master/scoutomate.js';
-		document.getElementsByTagName('head')[0].appendChild(loaderTag);
-	})();
-}
+    '[name*="firstName"i]':                 'Daniel',                       // Fill in the static input
+    '[name*="lastName"i]':                  function() {return 'Corn'},     // Fill in the return value
+    '[name*="payment"][value="VISA"]':      'Scoutomate.Actions.click',     // Select a radio button 
+    '#my-button':                           'Scoutomate.Actions.click'      // Click the element
+};
+```
+
+then include the library
+
+```html
+<script src="https://cdn.rawgit.com/cundd/scoutomate/master/scoutomate.js"
+        integrity="XA5ElvKtmv8D04vfpmzOdJ/zw/HUqQhg6Co5M4fEiewc07r9nHs46vH6OiYBeJopXLfNoQYJupgZEFzfH7F61Q=="
+        crossorigin="anonymous"></script>
 ```

@@ -5,12 +5,12 @@
     /**
      * Creates a new instance
      *
-     * @param {Object} data Object with keys to define selectors and values or actions
-     * @param {String} [root] Selector of the root element
-     * @param {Object} [options]
+     * @param {object} data Object with keys to define selectors and values or actions
+     * @param {string} [root] Selector of the root element
+     * @param {object} [options]
      * @constructor
      */
-    var Scoutomate = window.Scoutomate = function (data, root, options) {
+    const Scoutomate = window.Scoutomate = function (data, root, options) {
         this.data = data;
         this.root = root ? document.querySelector(root) : document.querySelector('body');
         this.options = Object.assign(
@@ -54,7 +54,7 @@
             element.setAttribute('selected', true);
 
             // Set the value of the parent select box if not done with setting "selected"
-            var selectElement = element.parentElement.nodeName === 'SELECT' ? element.parentElement : element.parentElement.parentElement;
+            const selectElement = element.parentElement.nodeName === 'SELECT' ? element.parentElement : element.parentElement.parentElement;
             if (selectElement.value != element.value) {
                 selectElement.value = element.value;
             }
@@ -91,18 +91,19 @@
          * @returns {NodeList}
          */
         handle: function (selector, valueOrAction) {
-            var _this = this;
-            var domNodes = this.root.querySelectorAll(selector);
+            const _this = this;
+            const domNodes = this.root.querySelectorAll(selector);
             this._debug('Found ' + domNodes.length + ' for "' + selector + '"');
 
             Array.prototype.forEach.call(domNodes, function (element) {
                 _this._debug(valueOrAction);
-                if (valueOrAction === Scoutomate.Actions.click) {
+                const preparedValueOrAction = (typeof valueOrAction === 'function') ? valueOrAction() : valueOrAction;
+                if (preparedValueOrAction === Scoutomate.Actions.click) {
                     _this.click(element);
-                } else if (valueOrAction === Scoutomate.Actions.select) {
+                } else if (preparedValueOrAction === Scoutomate.Actions.select) {
                     _this.select(element);
                 } else {
-                    _this.fillField(element, valueOrAction);
+                    _this.fillField(element, preparedValueOrAction);
                 }
             });
         },
@@ -112,10 +113,9 @@
          * then be filled with the property value or a special action will be performed if the value tells to
          */
         fill: function () {
-            var _data = this.data,
-                name;
+            const _data = this.data;
 
-            for (name in _data) {
+            for (let name in _data) {
                 if (_data.hasOwnProperty(name)) {
                     this.handle(name, _data[name]);
                 }
@@ -126,7 +126,7 @@
          * Triggers the event with the given name on the given node
          *
          * @param {HTMLElement} node
-         * @param {String} eventName
+         * @param {string} eventName
          * @param {*} [data] currently unused
          */
         triggerEvent: function (node, eventName, data) {
@@ -135,7 +135,7 @@
                 node.click();
                 return;
             }
-            var event = document.createEvent('HTMLEvents');
+            const event = document.createEvent('HTMLEvents');
             event.initEvent(eventName, true, false);
             node.dispatchEvent(event);
         },
@@ -175,9 +175,9 @@
          * @private
          */
         _applyLoggerFunction: function (functionName, inputArguments) {
-            var logger = window.console;
+            const logger = window.console;
             if (logger && typeof logger[functionName] === 'function') {
-                var argumentsArray = Array.prototype.slice.call(inputArguments);
+                const argumentsArray = Array.prototype.slice.call(inputArguments);
                 argumentsArray.unshift('[Scoutomate]');
 
                 logger[functionName].apply(logger, argumentsArray);
@@ -187,8 +187,8 @@
         }
     };
 
-    var scoutomateOptions = window['ScoutomateOptions'] || {};
-    var scoutomateData = window['ScoutomateData'];
+    const scoutomateOptions = window['ScoutomateOptions'] || {};
+    const scoutomateData = window['ScoutomateData'];
 
     return new Scoutomate(scoutomateData, null, scoutomateOptions);
 })();

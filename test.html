@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scoutomate</title>
+    <style>
+        html,
+        body,
+        select,
+        input,
+        textarea,
+        button {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<label>
+    First name
+    <input type="text" autocomplete="off" name="xyz[firstName]"/>
+</label>
+<label>
+    Last name
+    <input type="text" autocomplete="off" name="xyz[lastname]"/>
+</label>
+<label>
+    Payment<br>
+    CreditCard: <input type="radio" autocomplete="off" name="xyz[payment]" value="CreditCard"/><br>
+    Cash: <input type="radio" autocomplete="off" name="xyz[payment]" value="Cash"/>
+</label>
+<label>
+    <button id="my-button">#my-button</button>
+    <span id="outlet"></span>
+</label>
+
+
+<script>
+    (function () {
+        let counter = 0;
+        document.getElementById('my-button').addEventListener('click', function () {
+            counter += 1;
+            document.getElementById('outlet').innerText = 'button clicked ' + counter + ' times';
+        })
+    })()
+</script>
+
+<script>
+    window.ScoutomateData = {
+        '[name*="firstName"i]': 'Daniel', // Fill in the static input
+        '[name*="lastName"i]': function () {
+            return 'Corn'
+        }, // Fill in the return value
+        '[name*="payment"][value="CreditCard"]': 'Scoutomate.Actions.click', // Select a radio button
+        '#my-button': 'Scoutomate.Actions.click' // Click the element
+    };
+</script>
+<script src="scoutomate.js"
+        integrity="sha512-XA5ElvKtmv8D04vfpmzOdJ/zw/HUqQhg6Co5M4fEiewc07r9nHs46vH6OiYBeJopXLfNoQYJupgZEFzfH7F61Q=="
+        crossorigin="anonymous"></script>
+</body>
+</html>
