@@ -21,6 +21,6 @@ then include the library
 
 ```html
 <script src="https://cdn.rawgit.com/cundd/scoutomate/master/scoutomate.js"
-        integrity="XA5ElvKtmv8D04vfpmzOdJ/zw/HUqQhg6Co5M4fEiewc07r9nHs46vH6OiYBeJopXLfNoQYJupgZEFzfH7F61Q=="
+        integrity="sha384-BoJMv6Yd+k2RvI7cAkB/UPHYqbHcxjV7JxVnJ85ZPh9TjIUKcBdULJyNAda5Ex1k"
         crossorigin="anonymous"></script>
 ```
