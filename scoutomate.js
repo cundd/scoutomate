@@ -107,7 +107,7 @@
                 _this._debug(valueOrAction);
                 const preparedValueOrAction =
                     typeof valueOrAction === "function"
-                        ? valueOrAction()
+                        ? valueOrAction(element)
                         : valueOrAction;
                 if (preparedValueOrAction === Scoutomate.Actions.click) {
                     _this.click(element);
