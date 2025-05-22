@@ -203,6 +203,7 @@
 
     const scoutomateOptions = window["ScoutomateOptions"] || {};
     const scoutomateData = window["ScoutomateData"];
+    /** Run automatically if `ScoutomateData` is set */
     if (scoutomateData) {
         window["ScoutomateInstance"] = new Scoutomate(
             scoutomateData,
@@ -210,4 +211,6 @@
             scoutomateOptions,
         );
     }
+
+    window["Scoutomate"] = Scoutomate;
 })();
